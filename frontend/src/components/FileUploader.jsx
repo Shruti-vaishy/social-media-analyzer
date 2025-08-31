@@ -1,11 +1,13 @@
-import React ,{ useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 export default function FileUploader({ onResult }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [preview, setPreview] = useState(null); 
+  const [preview, setPreview] = useState(null);
   const [fileName, setFileName] = useState("");
 
   const onDrop = async (acceptedFiles) => {
@@ -26,7 +28,7 @@ export default function FileUploader({ onResult }) {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:5000/api/upload", formData, {
+      const res = await axios.post(`${API_BASE_URL}/api/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       onResult(res.data);
@@ -49,7 +51,9 @@ export default function FileUploader({ onResult }) {
       >
         <input {...getInputProps()} />
         {loading ? (
-          <p className="text-indigo-600 font-medium animate-pulse">⏳ Uploading & analyzing...</p>
+          <p className="text-indigo-600 font-medium animate-pulse">
+            ⏳ Uploading & analyzing...
+          </p>
         ) : (
           <p className="text-gray-700 text-lg">
             📂 <span className="font-semibold">Drag & drop</span> a file here <br />
